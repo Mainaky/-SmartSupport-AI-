@@ -1,0 +1,34 @@
+# Maven
+target/
+*.class
+*.jar
+*.war
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.env
+
+# IDE
+.idea/
+*.iml
+*.iws
+.eclipse/
+.classpath
+.project
+.settings/
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker volumes
+mysql_data/
+
+# Logs
+*.log
+logs/

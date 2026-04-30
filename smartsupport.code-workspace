@@ -1,0 +1,140 @@
+{
+  "folders": [
+    {
+      "name": "🎯 Root",
+      "path": "."
+    },
+    {
+      "name": "☕ Ticket Service (Spring Boot)",
+      "path": "ticket-service"
+    },
+    {
+      "name": "📨 Notification Service (Spring Boot)",
+      "path": "notification-service"
+    },
+    {
+      "name": "🤖 AI Classifier (Python)",
+      "path": "ai-classifier"
+    },
+    {
+      "name": "🌐 Frontend",
+      "path": "frontend"
+    }
+  ],
+  "settings": {
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "files.exclude": {
+      "**/target": true,
+      "**/.classpath": true,
+      "**/.project": true,
+      "**/.settings": true,
+      "**/__pycache__": true
+    },
+    "java.project.referencedLibraries": [
+      "lib/**/*.jar"
+    ],
+    "[java]": {
+      "editor.defaultFormatter": "redhat.java"
+    },
+    "[python]": {
+      "editor.defaultFormatter": "ms-python.python"
+    },
+    "python.defaultInterpreterPath": "${workspaceFolder}/ai-classifier/venv/bin/python",
+    "spring-boot.ls.java.home": "",
+    "maven.terminal.useJavaHome": true
+  },
+  "extensions": {
+    "recommendations": [
+      "vscjava.vscode-java-pack",
+      "vmware.vscode-spring-boot",
+      "vscjava.vscode-spring-initializr",
+      "vscjava.vscode-spring-boot-dashboard",
+      "ms-python.python",
+      "ms-azuretools.vscode-docker",
+      "ms-vscode.live-server",
+      "redhat.vscode-yaml",
+      "GabrielBB.vscode-lombok"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "java",
+        "name": "▶ Run Ticket Service",
+        "request": "launch",
+        "mainClass": "com.smartsupport.SmartSupportApplication",
+        "projectName": "ticket-service",
+        "args": "",
+        "envFile": "${workspaceFolder}/.env"
+      },
+      {
+        "type": "java",
+        "name": "▶ Run Notification Service",
+        "request": "launch",
+        "mainClass": "com.notification.NotificationServiceApplication",
+        "projectName": "notification-service"
+      },
+      {
+        "type": "python",
+        "name": "▶ Run AI Classifier",
+        "request": "launch",
+        "program": "${workspaceFolder}/ai-classifier/app.py",
+        "console": "integratedTerminal"
+      }
+    ],
+    "compounds": [
+      {
+        "name": "▶▶ Run All Services",
+        "configurations": [
+          "▶ Run Ticket Service",
+          "▶ Run Notification Service",
+          "▶ Run AI Classifier"
+        ]
+      }
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "🐳 Docker: Start All",
+        "type": "shell",
+        "command": "docker compose up --build -d",
+        "group": "build",
+        "problemMatcher": []
+      },
+      {
+        "label": "🐳 Docker: Stop All",
+        "type": "shell",
+        "command": "docker compose down",
+        "group": "build",
+        "problemMatcher": []
+      },
+      {
+        "label": "☕ Maven: Build Ticket Service",
+        "type": "shell",
+        "command": "cd ticket-service && mvn clean package -DskipTests",
+        "group": "build",
+        "problemMatcher": "$maven"
+      },
+      {
+        "label": "☕ Maven: Run Tests",
+        "type": "shell",
+        "command": "cd ticket-service && mvn test",
+        "group": "test",
+        "problemMatcher": "$maven"
+      },
+      {
+        "label": "🐍 Python: Install Dependencies",
+        "type": "shell",
+        "command": "cd ai-classifier && pip install -r requirements.txt",
+        "group": "build",
+        "problemMatcher": []
+      }
+    ]
+  }
+}
