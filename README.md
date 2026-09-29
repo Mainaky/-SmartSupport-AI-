@@ -1,6 +1,6 @@
 # 🤖 SmartSupport AI — Intelligent Customer Support Ticket System
 
-> A production-grade, AI-powered support ticket management system built with
+> A demo-ready, AI-assisted support ticket management system built with
 > **Java Spring Boot**, **Apache Kafka**, **Python (Flask AI)**, and **MySQL**.
 > Purpose-built to align with the Kapture CX SDE Internship tech stack.
 
@@ -299,17 +299,25 @@ smartsupport/
 
 ---
 
+## 🧠 What the Classifier Actually Does
+
+The Flask service uses a small, hand-written nearest-example text matcher for categories and keyword rules for urgency and priority. It does not load a trained scikit-learn model. This keeps the demo self-contained, but the tiny in-code examples are not suitable for real customer-support decisions.
+
+## ⚠️ Demo Deployment Limits
+
+This project is a learning/demo system. It has no user authentication or authorization, uses permissive cross-origin API access, and the Compose file has development defaults for database credentials. Do not expose it to the public internet or use it for real customer data without adding access controls, secret management, operational health checks, and a durable database-to-Kafka event strategy.
+
 ## 💡 Interview Talking Points
 
-1. **Why Kafka?** Decouples ticket creation from notification. Ticket service doesn't wait for emails to be sent — fast API response. Also enables multiple consumers (analytics, notifications, audit log) without modifying ticket service.
+1. **Why Kafka?** It lets ticket creation publish an event without waiting for the email service to finish. Other consumer groups can independently read the same event stream.
 
-2. **Why a separate Python service?** Microservice separation of concerns. AI model can be independently scaled, updated, or swapped (e.g., replace with an LLM call) without touching Java code.
+2. **Why a separate Python service?** The classifier can be changed or scaled separately from the Java ticket API. In this demo it is a simple nearest-example and keyword classifier, not a production ML model.
 
-3. **Exactly-once Kafka delivery** — achieved via `ENABLE_IDEMPOTENCE_CONFIG=true` + `ACKS=all`.
+3. **Producer reliability** — `acks=all` and producer idempotence help protect Kafka writes from certain retry-related duplicates. They do not make the database write and Kafka publish one atomic operation, and they do not guarantee end-to-end exactly-once email delivery.
 
-4. **Partition key = ticketId** — ensures all events for the same ticket go to the same partition → guarantees ordering per ticket.
+4. **Partition key = ticketId** — events for one ticket are routed to the same partition, preserving their order within that partition.
 
-5. **Auto-escalation** — `@Scheduled` job demonstrates proactive monitoring, not just reactive handling.
+5. **Auto-escalation** — a scheduled job runs hourly and escalates OPEN, HIGH-priority tickets older than 24 hours.
 
 ---
 

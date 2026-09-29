@@ -167,7 +167,7 @@ public class TicketService {
     @Transactional
     public void autoEscalateStaleTickets() {
         LocalDateTime threshold = LocalDateTime.now().minusHours(24);
-        List<Ticket> stale = ticketRepository.findByCreatedAtAfter(threshold).stream()
+        List<Ticket> stale = ticketRepository.findByCreatedAtBefore(threshold).stream()
                 .filter(t -> t.getStatus() == Ticket.TicketStatus.OPEN
                           && t.getPriority() == Ticket.TicketPriority.HIGH)
                 .toList();

@@ -22,10 +22,9 @@ public class KafkaConsumerConfig {
 
     @Bean
     public ConsumerFactory<String, TicketEventMessage> consumerFactory() {
-        JsonDeserializer<TicketEventMessage> deserializer = new JsonDeserializer<>(TicketEventMessage.class);
-        deserializer.setRemoveTypeHeaders(false);
-        deserializer.addTrustedPackages("*");
-        deserializer.setUseTypeMapperForKey(true);
+        // Ignore producer-specific Java class headers; deserialize the shared JSON shape into this service DTO.
+        JsonDeserializer<TicketEventMessage> deserializer = new JsonDeserializer<>(TicketEventMessage.class, false);
+        deserializer.setRemoveTypeHeaders(true);
 
         Map<String, Object> config = new HashMap<>();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);

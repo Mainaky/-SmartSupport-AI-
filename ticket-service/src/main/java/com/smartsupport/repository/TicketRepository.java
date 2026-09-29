@@ -31,7 +31,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     long countByCategory(Ticket.TicketCategory category);
 
     // Tickets created in last N hours
-    List<Ticket> findByCreatedAtAfter(LocalDateTime dateTime);
+    List<Ticket> findByCreatedAtBefore(LocalDateTime dateTime);
 
     // Tickets not yet assigned (unassigned open tickets)
     List<Ticket> findByAssignedAgentIsNullAndStatus(Ticket.TicketStatus status);
